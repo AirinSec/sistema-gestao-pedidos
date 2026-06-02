@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DoceGestor — Fazer Pedido</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/pedido.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="protegida">
+
+  <header class="app-header">
+    <a class="app-header__brand" href="index.html">🍰 DoceGestor</a>
+    <nav class="app-header__nav">
+      <a class="app-header__link" href="index.html">Catálogo</a>
+      <a class="app-header__link active" href="pedido.html">Novo pedido</a>
+      <a class="app-header__link" href="meus-pedidos.html">Meus pedidos</a>
+      <button class="btn btn--outline" id="logoutBtn" type="button">Sair</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+
+    <h1 class="page-title">Fazer pedido</h1>
+
+    <div class="pedido-layout">
+
+      <!-- Seleção de produtos -->
+      <section class="pedido-produtos card">
+        <h2 class="section-title">Escolha os produtos</h2>
+        <p class="estado-vazio" id="loadingProdutos">Carregando produtos…</p>
+        <div id="produtosList"></div>
+      </section>
+
+      <!-- Resumo e dados de entrega -->
+      <aside class="pedido-resumo">
+
+        <div class="card resumo-card">
+          <h2 class="section-title">Resumo</h2>
+          <div id="resumoItens">
+            <p class="resumo-vazio">Nenhum item selecionado.</p>
+          </div>
+          <div class="resumo-total">
+            <span>Total</span>
+            <strong id="totalValor">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <form class="card entrega-form" id="pedidoForm" novalidate>
+          <h2 class="section-title">Dados de entrega</h2>
+
+          <div class="form-group">
+            <label class="form-label" for="clienteNome">Seu nome *</label>
+            <input class="form-input" type="text" id="clienteNome" placeholder="Nome completo" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="telefone">Telefone *</label>
+            <input class="form-input" type="tel" id="telefone" placeholder="(00) 00000-0000" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="endereco">Endereço de entrega *</label>
+            <textarea class="form-input form-textarea" id="endereco" placeholder="Rua, número, bairro, cidade" required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dataEntrega">Data de entrega desejada *</label>
+            <input class="form-input" type="date" id="dataEntrega" required />
+          </div>
+
+          <p class="form-error" id="pedidoError" aria-live="polite"></p>
+
+          <button class="btn btn--primary btn--full" type="submit" id="enviarBtn">
+            Confirmar pedido
+          </button>
+        </form>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/pedido.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,313 @@
+/* ============================================================
+   DoceGestor — Estilos compartilhados das páginas admin
+   ============================================================ */
+
+/* Flash prevention — body começa invisível, JS remove a classe */
+body.protegida {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------
+   Page header
+   ------------------------------------------------------------ */
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+}
+
+/* ------------------------------------------------------------
+   Formulário de cadastro/edição
+   ------------------------------------------------------------ */
+.form-panel {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow);
+}
+
+.form-panel__title {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 1.25rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* ------------------------------------------------------------
+   Grid de produtos
+   ------------------------------------------------------------ */
+.produtos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
+}
+
+.produto-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  transition: box-shadow var(--transition), transform var(--transition);
+}
+
+.produto-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.produto-card__img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background-color: var(--cream-dark);
+}
+
+.produto-card__img-placeholder {
+  width: 100%;
+  height: 160px;
+  background-color: var(--cream-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+}
+
+.produto-card__body {
+  padding: 1rem;
+}
+
+.produto-card__nome {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 0.25rem;
+}
+
+.produto-card__preco {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--rose-dark);
+  margin-bottom: 0.5rem;
+}
+
+.produto-card__descricao {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.produto-card__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* ------------------------------------------------------------
+   Estado vazio / loading
+   ------------------------------------------------------------ */
+.estado-vazio {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem 1rem;
+  font-size: 0.95rem;
+}
+
+/* ------------------------------------------------------------
+   Dashboard cards
+   ------------------------------------------------------------ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.stat-card__valor {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--brown);
+  line-height: 1;
+  margin-bottom: 0.4rem;
+}
+
+.stat-card__label {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-card--pendente .stat-card__valor { color: var(--rose); }
+.stat-card--confirmado .stat-card__valor { color: var(--brown-light); }
+.stat-card--entregue .stat-card__valor { color: #4caf50; }
+
+/* ------------------------------------------------------------
+   Tabela de pedidos
+   ------------------------------------------------------------ */
+.pedidos-table-wrap {
+  overflow-x: auto;
+}
+
+.pedidos-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.pedidos-table th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: var(--cream-dark);
+  color: var(--brown);
+  font-weight: 500;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid var(--border);
+}
+
+.pedidos-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: middle;
+}
+
+.pedidos-table tr:last-child td {
+  border-bottom: none;
+}
+
+.pedidos-table tr:hover td {
+  background: var(--cream);
+}
+
+/* ------------------------------------------------------------
+   Status badges
+   ------------------------------------------------------------ */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge--pendente   { background: #fff3e0; color: #e65100; }
+.badge--confirmado { background: #e3f2fd; color: #1565c0; }
+.badge--entregue   { background: #e8f5e9; color: #2e7d32; }
+
+/* ------------------------------------------------------------
+   Select de status
+   ------------------------------------------------------------ */
+.status-select {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ------------------------------------------------------------
+   Responsividade
+   ------------------------------------------------------------ */
+@media (max-width: 600px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .produtos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ------------------------------------------------------------
+   Modal de confirmação (substitui window.confirm)
+   ------------------------------------------------------------ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(46, 31, 21, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 1rem;
+}
+
+.modal {
+  background: var(--white);
+  border-radius: calc(var(--radius) * 1.5);
+  padding: 1.75rem;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+}
+
+.modal__texto {
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.modal__sub {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}

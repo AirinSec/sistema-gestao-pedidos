@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DoceGestor — Pedidos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <link rel="stylesheet" href="../css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="protegida">
+
+  <header class="app-header">
+    <a class="app-header__brand" href="dashboard.html">🍰 DoceGestor</a>
+    <nav class="app-header__nav">
+      <a class="app-header__link" href="dashboard.html">Dashboard</a>
+      <a class="app-header__link" href="produtos.html">Produtos</a>
+      <a class="app-header__link active" href="pedidos.html">Pedidos</a>
+      <button class="btn btn--outline" id="logoutBtn" type="button">Sair</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+
+    <div class="page-header">
+      <h1 class="page-title">Pedidos</h1>
+      <div class="filtro-status">
+        <label class="form-label" for="filtroStatus">Filtrar por status:</label>
+        <select class="status-select" id="filtroStatus">
+          <option value="">Todos</option>
+          <option value="pendente">Pendente</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="entregue">Entregue</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="estado-vazio" id="loadingMsg">Carregando pedidos…</p>
+
+    <div class="pedidos-table-wrap" id="tabelaWrap" hidden>
+      <table class="pedidos-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Cliente</th>
+            <th>Data do pedido</th>
+            <th>Entrega desejada</th>
+            <th>Total</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="pedidosBody"></tbody>
+      </table>
+    </div>
+
+  </main>
+
+  <script src="../js/supabase-client.js"></script>
+  <script src="../js/auth.js"></script>
+  <script src="../js/admin/pedidos.js"></script>
+
+</body>
+</html>

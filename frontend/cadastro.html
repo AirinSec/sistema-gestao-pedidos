@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DoceGestor — Cadastro</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="login-page">
+
+  <div class="login-wrapper">
+
+    <div class="login-brand">
+      <span class="login-brand__icon">🍰</span>
+      <h1 class="login-brand__name">DoceGestor</h1>
+      <p class="login-brand__tagline">Crie sua conta para fazer pedidos</p>
+    </div>
+
+    <form class="login-form" id="cadastroForm" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="nome">Nome</label>
+        <input
+          class="form-input"
+          type="text"
+          id="nome"
+          placeholder="Seu nome completo"
+          required
+          autocomplete="name"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <input
+          class="form-input"
+          type="email"
+          id="email"
+          placeholder="seu@email.com"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="senha">Senha</label>
+        <input
+          class="form-input"
+          type="password"
+          id="senha"
+          placeholder="Mínimo 6 caracteres"
+          required
+          autocomplete="new-password"
+          minlength="6"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="confirmarSenha">Confirmar senha</label>
+        <input
+          class="form-input"
+          type="password"
+          id="confirmarSenha"
+          placeholder="Repita a senha"
+          required
+          autocomplete="new-password"
+        />
+      </div>
+
+      <p class="form-error" id="cadastroError" aria-live="polite"></p>
+
+      <button class="btn btn--primary btn--full" type="submit" id="cadastroBtn">
+        Criar conta
+      </button>
+
+      <p class="form-footer">
+        Já tem conta? <a href="login.html">Faça login</a>
+      </p>
+
+    </form>
+
+  </div>
+
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/cadastro.js"></script>
+
+</body>
+</html>

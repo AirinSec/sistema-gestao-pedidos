@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DoceGestor — Login</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="login-page">
+
+  <div class="login-wrapper">
+
+    <div class="login-brand">
+      <span class="login-brand__icon">🍰</span>
+      <h1 class="login-brand__name">DoceGestor</h1>
+      <p class="login-brand__tagline">Gestão de pedidos para confeitaria artesanal</p>
+    </div>
+
+    <form class="login-form" id="loginForm" novalidate>
+
+      <div class="form-group">
+        <label class="form-label" for="email">E-mail</label>
+        <input
+          class="form-input"
+          type="email"
+          id="email"
+          name="email"
+          placeholder="vendedora@email.com"
+          required
+          autocomplete="email"
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="senha">Senha</label>
+        <input
+          class="form-input"
+          type="password"
+          id="senha"
+          name="senha"
+          placeholder="••••••••"
+          required
+          autocomplete="current-password"
+        />
+      </div>
+
+      <p class="form-error" id="loginError" aria-live="polite"></p>
+
+      <button class="btn btn--primary btn--full" type="submit" id="loginBtn">
+        Entrar
+      </button>
+
+    </form>
+
+  </div>
+
+  <script src="js/supabase-client.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const email   = document.getElementById('email').value.trim();
+      const senha   = document.getElementById('senha').value;
+      const errorEl = document.getElementById('loginError');
+      const btn     = document.getElementById('loginBtn');
+
+      errorEl.textContent = '';
+
+      // Validação básica
+      if (!email || !senha) {
+        errorEl.textContent = 'Preencha e-mail e senha.';
+        return;
+      }
+
+      btn.disabled    = true;
+      btn.textContent = 'Entrando…';
+
+      const { error } = await login(email, senha);
+
+      if (error) {
+        errorEl.textContent = 'E-mail ou senha incorretos.';
+        btn.disabled    = false;
+        btn.textContent = 'Entrar';
+        return;
+      }
+
+    });
+  </script>
+
+</body>
+</html>

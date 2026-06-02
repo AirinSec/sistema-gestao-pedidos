@@ -1,20 +1,19 @@
 {
   "name": "sistema-gestao-pedidos",
   "version": "1.0.0",
-  "description": "Protótipo funcional de aplicação web para gestão de pedidos e catálogo de produtos de uma microempreendedora de confeitaria artesanal.",
-  "main": "index.js",
-  "directories": {
-    "doc": "docs"
-  },
+  "description": "Backend do Sistema de Gestão de Pedidos — API REST para gestão de pedidos de confeitaria artesanal.",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "jest --passWithNoTests"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andeAraujo/sistema-gestao-pedidos.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/andeAraujo/sistema-gestao-pedidos/issues"
   },
@@ -23,6 +22,10 @@
     "@supabase/supabase-js": "^2.99.2",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
-    "express": "^5.2.1"
+    "express": "^4.21.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
   }
 }
