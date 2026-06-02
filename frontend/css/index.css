@@ -119,3 +119,82 @@
     grid-template-columns: 1fr;
   }
 }
+
+
+/*--------------------------------------------
+QUANTIDADE DOS BRIGADERIOS
+----------------------------------------------*/
+
+.quantidade-box {
+display: flex;
+align-items: center;
+justify-content: center;
+ gap: 0.75rem;
+
+ margin-bottom: 1rem;
+
+}
+
+.qtd-btn {
+  width: 34px;
+  height: 34px;
+
+  border: none;
+  border: 50%;
+
+  background-color: var(--brown);
+  color: var(--white);
+
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  transition: opacity var(--transition);
+
+}
+
+.qtd-btn:houver {
+  opacity: 0.9;
+}
+
+
+.qtd-numero {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--brown);
+  min-width: 20px;
+  text-align: center;
+
+
+}
+
+/*--------------------------------
+BOTAO PEDIR
+----------------------------------*/
+
+.produto-btn {
+  width: 100px;
+  
+  border: none;
+  border-radius: var(--radius);
+
+  padding: 0.75rem;
+
+  background-color: var(--brown);
+  color: var(--white);
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+  backgraund-color var(--transition),
+  transform var(--transition);
+
+}
+
+
+.produto-btn:houver{
+background-color: var(--rose-dark);
+transform: translateY(-1px);
+}

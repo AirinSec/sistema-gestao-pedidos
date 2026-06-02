@@ -1,3 +1,5 @@
+
+
 const API_URL = 'http://localhost:3000';
 
 (async () => {
@@ -65,31 +67,131 @@ async function carregarProdutos() {
     console.error(err);
   }
 }
-
-function renderCartao(p) {
+  function renderCartao(p) {
+console.log(p)
   const imagem = p.imagem_url
     ? `<img class="produto-card__img" src="${p.imagem_url}" alt="${p.nome}" />`
     : `<div class="produto-card__img-placeholder">🍰</div>`;
 
   return `
     <div class="produto-card">
+
       ${imagem}
+
       <div class="produto-card__body">
-        <p class="produto-card__nome">${p.nome}</p>
-        <p class="produto-card__preco">R$ ${Number(p.preco).toFixed(2).replace('.', ',')}</p>
-        ${p.descricao ? `<p class="produto-card__descricao">${p.descricao}</p>` : ''}
+
+        <p class="produto-card__nome">
+          ${p.nome}
+        </p>
+
+        <p class="produto-card__preco">
+          R$ ${Number(p.preco).toFixed(2).replace('.', ',')}
+        </p>
+
+        ${p.descricao
+          ? `<p class="produto-card__descricao">${p.descricao}</p>`
+          : ''
+        }
+
+        <div class="quantidade-box">
+
+          <button
+            class="qtd-btn"
+            onclick="diminuirQuantidade(${p.id})">
+            -
+          </button>
+
+          <span
+            class="qtd-numero"
+            id="qtd-${p.id}">
+            1
+          </span>
+
+          <button
+            class="qtd-btn"
+            onclick="aumentarQuantidade(${p.id})">
+            +
+          </button>
+
+        </div>
+
         <div class="produto-card__actions">
-          <button class="btn btn--primary btn--full" onclick="irParaPedido()">Pedir</button>
+
+          <button
+            class="produto-btn"
+            onclick="adicionarAoPedido(${p.id}, '${p.nome}', ${p.preco})">
+
+            Pedir
+          </button>
         </div>
       </div>
     </div>
   `;
 }
 
+const quantidades = {};
+
+function aumentarQuantidade(id) {
+  if(!quantidades[id]) {
+    quantidades[id] = 1;
+  }
+
+  quantidades[id]++;
+
+  atualizarQuantidade(id);
+}
+
+function diminuirQuantidade(id) {
+  if(!quantidades[id]) {
+    quantidades[id] = 1; 
+  }
+
+  if(quantidades[id] > 1) {
+    quantidades[id]--;
+  }
+  atualizarQuantidade(id);
+}
+
+function atualizarQuantidade(id) {
+  document.getElementById(`qtd-${id}`).textContent =
+  quantidades[id] || 1;
+}
+window.aumentarQuantidade = aumentarQuantidade;
+window.diminuirQuantidade = diminuirQuantidade;
 // ------------------------------------------------------------
 // Botão Pedir - redireciona conforme sessão
 // ------------------------------------------------------------
-async function irParaPedido() {
+
+function adicionarAoPedido(id, nome, preco) {
+  const quantidadeSelecionada = quantidades[id] || 1;
+
+  const pedido = JSON.parse(
+    localStorage.getItem('pedido')
+  ) || [];
+
+  pedido.push({
+    id,
+    nome,
+    preco,
+    quantidade: quantidadeSelecionada
+  });
+
+  localStorage.setItem(
+    'pedido',
+    JSON.stringify(pedido)
+  );
+  alert(
+    `${quantidadeSelecionada}x ${nome} adicionado ao Pedido!`
+  );
+}
+
+
+
+
+
+
+
+async function irParaPedido(produtoId) {
   const { data } = await supabaseClient.auth.getSession();
 
   if (!data.session) {
