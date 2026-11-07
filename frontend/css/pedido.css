@@ -1,5 +1,5 @@
 /* ============================================================
-   DoceGestor — Estilos da página de pedido
+  DoceGestor — Estilos da página de pedido
    ============================================================ */
 
 /* Flash prevention */
@@ -16,7 +16,7 @@ body.protegida {
 }
 
 /* ------------------------------------------------------------
-   Layout duas colunas
+  Layout duas colunas
    ------------------------------------------------------------ */
 .pedido-layout {
   display: grid;
@@ -26,7 +26,7 @@ body.protegida {
 }
 
 /* ------------------------------------------------------------
-   Lista de produtos para seleção
+  Lista de produtos para seleção
    ------------------------------------------------------------ */
 .produto-item {
   display: flex;
@@ -116,7 +116,7 @@ body.protegida {
 }
 
 /* ------------------------------------------------------------
-   Resumo do pedido
+  Resumo do pedido
    ------------------------------------------------------------ */
 .resumo-card {
   margin-bottom: 1rem;
@@ -167,7 +167,7 @@ body.protegida {
 }
 
 /* ------------------------------------------------------------
-   Formulário de entrega
+  Formulário de entrega
    ------------------------------------------------------------ */
 .entrega-form {
   display: flex;
@@ -176,10 +176,52 @@ body.protegida {
 }
 
 /* ------------------------------------------------------------
-   Responsividade
+  Responsividade
    ------------------------------------------------------------ */
 @media (max-width: 768px) {
   .pedido-layout {
     grid-template-columns: 1fr;
   }
+}
+
+.modal-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+}
+
+.modal{
+  background: white;
+  padding: 2 rem;
+  border-radius: 12px;
+
+  width: 90%;
+  max-width: 600px;
+
+  max-height: 80vh;
+  overflow-y:auto;
+
+}
+
+.modal h2{
+  margin-top: 0;
+}
+
+.modal ul{
+  padding-left: 20px;
+}
+
+.modal li{
+  margin-bottom: 8px;
+}
+.form-divider{
+margin: 30px 0;
+border: none;
+border-top: 1px solid  #e6d6c7;
 }

@@ -301,29 +301,44 @@ body {
 }
 
 /* ------------------------------------------------------------
-   Responsividade
+  Responsividade
    ------------------------------------------------------------ */
 @media (max-width: 480px) {
-  .login-wrapper {
-    padding: 2rem 1.25rem;
-    border-radius: var(--radius);
-  }
-
-  .login-brand__name {
-    font-size: 1.7rem;
-  }
-
-  .app-header {
-    padding: 0.75rem 1rem;
-  }
-
-  .app-main {
-    padding: 1.25rem 1rem;
-  }
+.login-wrapper {
+  padding: 2rem 1.25rem;
+  border-radius: var(--radius);
+}
+.login-brad__name {
+  font-size: 1.7rem;
+}
+.app-header {
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+  flex-wrap:wrap;
+}
+.app-header__brand {
+  font-size: 1.2rem;
+  white-space: nowrap;
+  flex-shrink:0;
+}
+.app-header__nav {
+  width: 100%;
+  display:flex;
+  justify-content:center;
+  gap: 0.25rem;
+  flex-shrink: wrap;
+}
+.app-header__link {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.45rem;
+}
+.app-main {
+  padding: 1.25rem 1rem;
+}
 }
 
 /* ------------------------------------------------------------
-   Rodapé de formulário (link "já tem conta?" etc.)
+  Rodapé de formulário (link "já tem conta?" etc.)
    ------------------------------------------------------------ */
 .form-footer {
   text-align: center;

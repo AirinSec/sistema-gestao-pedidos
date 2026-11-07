@@ -5,12 +5,15 @@
 
 const API_URL = 'http://localhost:3000';
 
-// Mapa de quantidades: { produto_id: quantidade }
+// Mapa dos produtos selecionados
 const quantidades = {};
 
 (async () => {
+
   await exigirAutenticacao();
+
   document.body.classList.remove('protegida');
+
   definirDataMinima();
   await carregarProdutos();
   inicializarEventos();
@@ -45,11 +48,40 @@ async function carregarProdutos() {
     }
 
     listaEl.innerHTML = data.map(renderItem).join('');
+    // carregar produtos que vieram do catalogo
+    carregarPedidoSalvo();
+
+    //Atualizar o resumo do pedido
+    atualizarResumo();
 
   } catch (err) {
     loadingEl.textContent = 'Erro ao carregar produtos.';
     console.error(err);
   }
+}
+
+// ------------------------------------------------------------
+// Carregar produtos salvos do catálogo
+// ------------------------------------------------------------
+function carregarPedidoSalvo() {
+
+  const pedidoSalvo =
+  JSON.parse(localStorage.getItem('pedido')) || [];
+
+  if(!pedidoSalvo.length) return;
+    pedidoSalvo.forEach(item => {
+      quantidades[item.id] = {
+        quantidade: item.quantidade,
+        preco: item.preco
+      };
+      const quantidadeEl =
+      document.getElementById(`qty-${item.id}`);
+      
+      if(quantidadeEl) {
+        quantidadeEl.textContent = item.quantidade
+      }
+
+    });
 }
 
 function renderItem(p) {
@@ -132,60 +164,126 @@ function atualizarResumo() {
 async function enviarPedido(e) {
   e.preventDefault();
 
-  const errorEl    = document.getElementById('pedidoError');
-  const enviarBtn  = document.getElementById('enviarBtn');
-  errorEl.textContent = '';
+  const errorEl = document.getElementById("pedidoError");
+  const enviarBtn = document.getElementById("enviarBtn");
 
-  const clienteNome  = document.getElementById('clienteNome').value.trim();
-  const telefone     = document.getElementById('telefone').value.trim();
-  const endereco     = document.getElementById('endereco').value.trim();
-  const dataEntrega  = document.getElementById('dataEntrega').value;
+  errorEl.textContent = "";
 
-  if (!clienteNome || !telefone || !endereco || !dataEntrega) {
-    errorEl.textContent = 'Preencha todos os campos de entrega.';
+  // Dados do cliente
+  const cliente_nome = document.getElementById("clienteNome").value.trim();
+  const telefone = document.getElementById("telefone").value.trim();
+  const endereco = document.getElementById("endereco").value.trim();
+  const data_entrega = document.getElementById("dataEntrega").value;
+
+  // Dados do evento
+  const tipo_evento = document.getElementById("tipoEvento").value;
+  const tema = document.getElementById("tema").value.trim();
+  const quantidade_convidados =
+    Number(document.getElementById("quantidadeConvidados").value) || null;
+  const observacoes =
+    document.getElementById("observacoes").value.trim();
+
+  if (!cliente_nome || !telefone || !endereco || !data_entrega) {
+    errorEl.textContent = "Preencha todos os campos obrigatórios.";
     return;
   }
 
   const ids = Object.keys(quantidades);
+
   if (!ids.length) {
-    errorEl.textContent = 'Selecione ao menos um produto.';
+    errorEl.textContent = "Selecione ao menos um produto.";
     return;
   }
 
   const itens = ids.map(id => ({
-    produto_id: parseInt(id),
-    quantidade: quantidades[id].quantidade,
+    produto_id: Number(id),
+    quantidade: quantidades[id].quantidade
   }));
 
   const token = await getToken();
 
-  enviarBtn.disabled    = true;
-  enviarBtn.textContent = 'Enviando…';
+  enviarBtn.disabled = true;
+  enviarBtn.textContent = "Enviando...";
 
   try {
+
+    const body = {
+      cliente_nome,
+      telefone,
+      endereco,
+      data_entrega,
+
+      tipo_evento,
+      tema,
+      quantidade_convidados,
+      observacoes,
+
+      itens
+    };
+
+    console.log(body);
+
     const res = await fetch(`${API_URL}/pedidos`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify({ cliente_nome: clienteNome, telefone, endereco, data_entrega: dataEntrega, itens }),
+      body: JSON.stringify(body)
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      errorEl.textContent = err.erro || 'Erro ao enviar pedido.';
-      return;
-    }
+let resposta = {};
 
-    window.location.href = 'meus-pedidos.html';
+try {
+  resposta = await res.json();
+} catch {
+  resposta = {};
+}
+
+if (!res.ok) {
+
+  switch (res.status) {
+
+    case 400:
+      errorEl.textContent =
+        resposta.erro || "Dados inválidos. Verifique os campos.";
+      break;
+
+    case 401:
+      errorEl.textContent =
+        "Sessão expirada. Faça login novamente.";
+      break;
+
+    case 403:
+      errorEl.textContent =
+        "Você não tem permissão para realizar esta ação.";
+      break;
+
+    case 500:
+      errorEl.textContent =
+        "Erro interno do servidor. Tente novamente mais tarde.";
+      break;
+
+    default:
+      errorEl.textContent =
+        resposta.erro || "Erro ao enviar pedido.";
+  }
+
+  return;
+}
+    localStorage.removeItem('pedido');
+    window.location.href = "meus-pedidos.html";
 
   } catch (err) {
-    errorEl.textContent = 'Erro de conexão com o servidor.';
+
     console.error(err);
+    errorEl.textContent = "Não foi possível conectar ao servidor. Verifique sua internet ou tente novamente mais tarde.";
+
   } finally {
-    enviarBtn.disabled    = false;
-    enviarBtn.textContent = 'Confirmar pedido';
+
+    enviarBtn.disabled = false;
+    enviarBtn.textContent = "Confirmar pedido";
+
   }
 }
 

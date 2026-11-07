@@ -23,7 +23,15 @@ const { supabase } = require('./lib/supabase');
 // ------------------------------------------------------------
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  'http://127.0.0.1:5500',
+  process.env.FRONTEND_URL
+].filter(Boolean);
+
+app.use(cors({
+  origin:allowedOrigins
+}));
+
 app.use(express.json());
 
 // ------------------------------------------------------------

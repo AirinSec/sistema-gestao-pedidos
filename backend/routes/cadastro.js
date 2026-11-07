@@ -21,8 +21,7 @@ router.post('/', async (req, res) => {
     email_confirm: true,
     user_metadata: {
       nome,
-      role: 'customer',
-    },
+    }
   });
 
   if (error) {

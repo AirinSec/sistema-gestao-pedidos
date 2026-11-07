@@ -93,28 +93,6 @@ console.log(p)
           : ''
         }
 
-        <div class="quantidade-box">
-
-          <button
-            class="qtd-btn"
-            onclick="diminuirQuantidade(${p.id})">
-            -
-          </button>
-
-          <span
-            class="qtd-numero"
-            id="qtd-${p.id}">
-            1
-          </span>
-
-          <button
-            class="qtd-btn"
-            onclick="aumentarQuantidade(${p.id})">
-            +
-          </button>
-
-        </div>
-
         <div class="produto-card__actions">
 
           <button
@@ -129,67 +107,138 @@ console.log(p)
   `;
 }
 
-const quantidades = {};
 
-function aumentarQuantidade(id) {
-  if(!quantidades[id]) {
-    quantidades[id] = 1;
-  }
-
-  quantidades[id]++;
-
-  atualizarQuantidade(id);
-}
-
-function diminuirQuantidade(id) {
-  if(!quantidades[id]) {
-    quantidades[id] = 1; 
-  }
-
-  if(quantidades[id] > 1) {
-    quantidades[id]--;
-  }
-  atualizarQuantidade(id);
-}
-
-function atualizarQuantidade(id) {
-  document.getElementById(`qtd-${id}`).textContent =
-  quantidades[id] || 1;
-}
-window.aumentarQuantidade = aumentarQuantidade;
-window.diminuirQuantidade = diminuirQuantidade;
 // ------------------------------------------------------------
 // Botão Pedir - redireciona conforme sessão
 // ------------------------------------------------------------
+function adicionarAoPedido(id, nome , preco){
+  const pedido = JSON.parse(localStorage.getItem('pedido')
+) || [];
+  
+  const itemExistente = pedido.find(item => item.id === id
 
-function adicionarAoPedido(id, nome, preco) {
-  const quantidadeSelecionada = quantidades[id] || 1;
+  );
 
-  const pedido = JSON.parse(
-    localStorage.getItem('pedido')
-  ) || [];
+  if (itemExistente) {
+    itemExistente.quantidade += 1;
 
-  pedido.push({
-    id,
-    nome,
-    preco,
-    quantidade: quantidadeSelecionada
-  });
+  } else {
+    pedido.push({
+      id,
+      nome,
+      preco,
+      quantidade:1
+    });
 
-  localStorage.setItem(
-    'pedido',
+  }
+  localStorage.setItem('pedido',
     JSON.stringify(pedido)
   );
-  alert(
-    `${quantidadeSelecionada}x ${nome} adicionado ao Pedido!`
-  );
+
+  mostrarModalPedido(nome);
+
 }
 
+async function mostrarModalPedido(nome) {
+  const { data } = await supabaseClient.auth.getSession();
+  const session = data.session;
 
+  const modalExistente = document.getElementById('modalPedido');
 
+  if (modalExistente) modalExistente.remove();
 
+  const modal = document.createElement('div');
+  modal.id = 'modalPedido';
+  modal.className  = 'pedido-modal-overlay';
 
+  const conteudoModal = session
+    ? `
+    <div class="pedido-modal" role="dialog" aria-modal="true"
+          aria-labelledby="pedidoModalTitulo">
+        <button type="button" class="pedido-modal__fechar"
+                aria-label="Fechar">&times;</button>
 
+        <div class="pedido-modal__icone">✓</div>
+
+        <h2 id="pedidoModalTitulo">Adicionado ao carrinho!</h2>
+
+        <p>
+          <strong>${nome}</strong> foi adicionado ao seu carrinho.
+        </p>
+
+        <p>
+          Você já está conectado à sua conta.
+          Agora pode continuar escolhendo seus doces ou finalizar seu pedido.
+        </p>
+
+        <div class="pedido-modal__acoes">
+          <a class="btn btn--primary" href="pedido.html">
+            Finalizar pedido
+          </a>
+        </div>
+
+        <button type="button" class="pedido-modal__continuar">
+          Continuar escolhendo
+        </button>
+
+        <small>
+          Seu pedido será registrado após a finalização.
+        </small>
+      </div>
+    `
+    : `
+      <div class="pedido-modal" role="dialog" aria-modal="true"
+          aria-labelledby="pedidoModalTitulo">
+        <button type="button" class="pedido-modal__fechar"
+                aria-label="Fechar">&times;</button>
+
+        <div class="pedido-modal__icone">✓</div>
+
+        <h2 id="pedidoModalTitulo">Adicionado ao carrinho!</h2>
+
+        <p>
+          <strong>${nome}</strong> foi adicionado ao seu carrinho.
+        </p>
+
+        <p>
+          Para finalizar seu pedido, entre na sua conta ou
+          cadastre-se gratuitamente.
+        </p>
+
+        <div class="pedido-modal__acoes">
+          <a class="btn btn--primary" href="login.html">Entrar</a>
+          <a class="btn btn--outline" href="cadastro.html">Cadastrar</a>
+        </div>
+
+        <button type="button" class="pedido-modal__continuar">
+          Continuar escolhendo
+        </button>
+
+        <small>
+          Seu pedido será registrado após a finalização.
+        </small>
+      </div>
+    `;
+
+    modal.innerHTML = conteudoModal;
+    document.body.appendChild(modal);
+
+    function fecharModal() {
+      modal.remove();
+    }
+
+    modal.querySelector('.pedido-modal__fechar')
+    .addEventListener('click', fecharModal);
+
+    modal.querySelector('.pedido-modal__continuar')
+    .addEventListener('click', fecharModal);
+
+    modal.addEventListener('click', event => {
+      if( event.target === modal) {
+        fecharModal();
+      }
+    });
+}
 
 async function irParaPedido(produtoId) {
   const { data } = await supabaseClient.auth.getSession();

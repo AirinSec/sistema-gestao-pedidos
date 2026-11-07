@@ -22,6 +22,20 @@ async function carregarDashboard() {
     });
     const pedidos = await res.json();
 
+    console.log("STATUS:", res.status);
+    console.log("PEDIDOS:",pedidos);
+
+    if(!res.ok) {
+      loadingMsg.textContent = pedidos.error || "Erro ao carregar pedidos.";
+      return;
+    }
+
+    if(!Array.isArray(pedidos)){
+      console.error("A API NÂO RETORNOU UM ARRAY:",pedidos);
+      loadingMsg.textContent = "Resposta invalida da APi.";
+      return;
+    }
+
     // Calcular totais por status
     const total      = pedidos.length;
     const pendente   = pedidos.filter(p => p.status === 'pendente').length;

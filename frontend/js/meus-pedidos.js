@@ -13,29 +13,81 @@ const API_URL = 'http://localhost:3000';
 })();
 
 async function carregarPedidos() {
-  const loadingMsg = document.getElementById('loadingMsg');
-  const listaEl    = document.getElementById('pedidosList');
-  const token      = await getToken();
+  const loadingMsg = document.getElementById("loadingMsg");
+  const listaEl = document.getElementById("pedidosList");
+  const token = await getToken();
 
   try {
-    const res  = await fetch(`${API_URL}/pedidos`, {
-      headers: { 'Authorization': `Bearer ${token}` },
+
+    const res = await fetch(`${API_URL}/pedidos`, {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     });
-    const data = await res.json();
+
+    let data = [];
+
+    try {
+      data = await res.json();
+    } catch {
+      data = [];
+    }
+
+    if (!res.ok) {
+
+      switch (res.status) {
+
+        case 401:
+          loadingMsg.textContent =
+            "Sua sessão expirou. Faça login novamente.";
+
+          setTimeout(() => {
+            window.location.href = "login.html";
+          }, 2000);
+
+          return;
+
+        case 403:
+          loadingMsg.textContent =
+            "Você não tem permissão para acessar esta página.";
+          return;
+
+        case 500:
+          loadingMsg.textContent =
+            "Erro interno do servidor. Tente novamente mais tarde.";
+          return;
+
+        default:
+          loadingMsg.textContent =
+            data.erro || "Erro ao carregar pedidos.";
+          return;
+
+      }
+
+    }
 
     loadingMsg.hidden = true;
 
     if (!data.length) {
-      loadingMsg.hidden      = false;
-      loadingMsg.innerHTML   = 'Você ainda não fez nenhum pedido. <a href="pedido.html">Fazer pedido</a>';
+
+      loadingMsg.hidden = false;
+
+      loadingMsg.innerHTML =
+        'Você ainda não fez nenhum pedido. <a href="pedido.html">Fazer pedido</a>';
+
       return;
+
     }
 
-    listaEl.innerHTML = data.map(renderPedido).join('');
+    listaEl.innerHTML = data.map(renderPedido).join("");
 
   } catch (err) {
-    loadingMsg.textContent = 'Erro ao carregar pedidos.';
+
     console.error(err);
+
+    loadingMsg.textContent =
+      "Não foi possível conectar ao servidor. Verifique sua internet ou tente novamente mais tarde.";
+
   }
 }
 

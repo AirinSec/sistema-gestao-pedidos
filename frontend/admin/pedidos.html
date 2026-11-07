@@ -27,14 +27,32 @@
 
     <div class="page-header">
       <h1 class="page-title">Pedidos</h1>
-      <div class="filtro-status">
-        <label class="form-label" for="filtroStatus">Filtrar por status:</label>
-        <select class="status-select" id="filtroStatus">
-          <option value="">Todos</option>
-          <option value="pendente">Pendente</option>
-          <option value="confirmado">Confirmado</option>
-          <option value="entregue">Entregue</option>
-        </select>
+      <div class="filtros-pedidos">
+        <div class="filtro-busca">
+          <label class="form-label" for="buscaCliente">
+            Buscar Cliente:
+          </label>
+          <input
+          class="form-input"
+          type="search"
+          id="buscaCliente"
+          placeholder="Digite o nome do Cliente..."
+          autocomplete="off"
+          />
+        </div>
+
+        <div class="filtro-status">
+          <label class="form-label" for="filtroStatus">
+            Filtrar por Status:
+          </label>
+
+          <select class="status-select" id="filtroStatus">
+            <option value="">Todos</option>
+            <option value="pendente">Pendente</option>
+            <option value="confirmado">Confirmado</option>
+            <option value="entregue">Entregue</option>
+          </select>
+        </div>
       </div>
     </div>
 

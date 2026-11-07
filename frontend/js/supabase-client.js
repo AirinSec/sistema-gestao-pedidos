@@ -1,15 +1,14 @@
 // ============================================================
-//  Cliente Supabase (frontend)
-//  Importar este arquivo antes de qualquer outro script JS
-//  que precise do cliente supabase.
-//
-//  SUPABASE_PUBLISHABLE_KEY é segura para uso no frontend —
-//  o acesso ao banco é bloqueado pelo RLS para a chave pública.
-//  Toda operação sensível passa pelo backend via SUPABASE_SECRET_KEY.
+// Cliente Supabase (frontend)
 // ============================================================
 
-const SUPABASE_URL         = 'https://your-supabase-url.supabase.co'; // Substitua pela sua URL real
-const SUPABASE_PUBLISHABLE = 'sb_publishable_xxxxxxxxxxxxxxxx_xxx_xxxx'; // Substitua pela sua chave pública real
+const SUPABASE_URL =
+'https://etqwrbmgnvsdehimmslx.supabase.co';
 
-// Criar cliente Supabase para uso no frontend
-var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE);
+const SUPABASE_PUBLISHABLE =
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0cXdyYm1nbnZzZGVoaW1tc2x4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM2ODI2MjUsImV4cCI6MjA4OTI1ODYyNX0.Z9qUrXoWIq2-iPb1sk--MndV61qart04RT8BhT40fHg';
+
+var supabaseClient = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE
+);
