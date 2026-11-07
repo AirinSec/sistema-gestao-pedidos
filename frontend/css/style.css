@@ -1,0 +1,358 @@
+/* ============================================================
+   Estilos globais
+   Paleta: creme, rosé, marrom quente — estética artesanal
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   Variáveis
+   ------------------------------------------------------------ */
+:root {
+  --cream:       #fdf6ee;
+  --cream-dark:  #f5e9d8;
+  --rose:        #c8837a;
+  --rose-dark:   #a8635b;
+  --brown:       #5c3d2e;
+  --brown-light: #8b6352;
+  --text:        #2e1f15;
+  --text-muted:  #7a6055;
+  --border:      #e0cfc4;
+  --error:       #c0392b;
+  --white:       #ffffff;
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans', sans-serif;
+
+  --radius:      10px;
+  --shadow:      0 4px 24px rgba(92, 61, 46, 0.10);
+  --shadow-lg:   0 8px 40px rgba(92, 61, 46, 0.15);
+
+  --transition:  0.2s ease;
+}
+
+/* ------------------------------------------------------------
+   Reset & base
+   ------------------------------------------------------------ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  font-weight: 300;
+  color: var(--text);
+  background-color: var(--cream);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ------------------------------------------------------------
+   Página de login
+   ------------------------------------------------------------ */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(ellipse at 20% 50%, rgba(200, 131, 122, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 20%, rgba(245, 233, 216, 0.6) 0%, transparent 50%);
+}
+
+.login-wrapper {
+  width: 100%;
+  max-width: 400px;
+  background: var(--white);
+  border-radius: calc(var(--radius) * 2);
+  box-shadow: var(--shadow-lg);
+  padding: 2.5rem 2rem;
+  border: 1px solid var(--border);
+}
+
+.login-brand {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-brand__icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.login-brand__name {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--brown);
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.login-brand__tagline {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+  font-weight: 300;
+}
+
+/* ------------------------------------------------------------
+   Formulários
+   ------------------------------------------------------------ */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--brown);
+  letter-spacing: 0.02em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 300;
+  color: var(--text);
+  background: var(--cream);
+  transition: border-color var(--transition), box-shadow var(--transition);
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.6;
+}
+
+.form-input:focus {
+  border-color: var(--rose);
+  box-shadow: 0 0 0 3px rgba(200, 131, 122, 0.15);
+  background: var(--white);
+}
+
+.form-input:invalid:not(:placeholder-shown) {
+  border-color: var(--error);
+}
+
+.form-error {
+  font-size: 0.85rem;
+  color: var(--error);
+  min-height: 1.2em;
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------
+   Botões
+   ------------------------------------------------------------ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition), opacity var(--transition);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.btn--primary {
+  background-color: var(--rose);
+  color: var(--white);
+}
+
+.btn--primary:hover {
+  background-color: var(--rose-dark);
+}
+
+.btn--primary:active {
+  transform: scale(0.98);
+}
+
+.btn--primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn--outline {
+  background: transparent;
+  border: 1.5px solid var(--border);
+  color: var(--brown-light);
+}
+
+.btn--outline:hover {
+  border-color: var(--rose);
+  color: var(--rose-dark);
+}
+
+.btn--danger {
+  background-color: transparent;
+  border: 1.5px solid var(--error);
+  color: var(--error);
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn--danger:hover {
+  background-color: var(--error);
+  color: var(--white);
+}
+
+/* ------------------------------------------------------------
+   Layout geral (páginas internas)
+   ------------------------------------------------------------ */
+.app-header {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(92, 61, 46, 0.06);
+}
+
+.app-header__brand {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--brown);
+  text-decoration: none;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-header__link {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  transition: color var(--transition), background-color var(--transition);
+  font-weight: 400;
+}
+
+.app-header__link:hover,
+.app-header__link.active {
+  color: var(--rose-dark);
+  background-color: var(--cream-dark);
+}
+
+.app-main {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.page-title {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--brown);
+  margin-bottom: 1.5rem;
+}
+
+/* ------------------------------------------------------------
+   Cards / painéis
+   ------------------------------------------------------------ */
+.card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+/* ------------------------------------------------------------
+  Responsividade
+   ------------------------------------------------------------ */
+@media (max-width: 480px) {
+.login-wrapper {
+  padding: 2rem 1.25rem;
+  border-radius: var(--radius);
+}
+.login-brad__name {
+  font-size: 1.7rem;
+}
+.app-header {
+  padding: 0.75rem 1rem;
+  gap: 0.5rem;
+  flex-wrap:wrap;
+}
+.app-header__brand {
+  font-size: 1.2rem;
+  white-space: nowrap;
+  flex-shrink:0;
+}
+.app-header__nav {
+  width: 100%;
+  display:flex;
+  justify-content:center;
+  gap: 0.25rem;
+  flex-shrink: wrap;
+}
+.app-header__link {
+  font-size: 0.8rem;
+  padding: 0.35rem 0.45rem;
+}
+.app-main {
+  padding: 1.25rem 1rem;
+}
+}
+
+/* ------------------------------------------------------------
+  Rodapé de formulário (link "já tem conta?" etc.)
+   ------------------------------------------------------------ */
+.form-footer {
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.form-footer a {
+  color: var(--rose-dark);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.form-footer a:hover {
+  text-decoration: underline;
+}

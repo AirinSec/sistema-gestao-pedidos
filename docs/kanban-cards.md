@@ -26,95 +26,192 @@ colunas abaixo e adicione os cards na ordem indicada.
 - Prazo: 18/03 ✅ Concluído
 - Tarefas:
   - [x] Criar conta e projeto no Supabase
-  - [x] Executar `database/schema.sql` no SQL Editor do Supabase (3 tabelas: produtos, pedidos, itens_pedido)
+  - [x] Executar database/schema.sql no SQL Editor do Supabase (3 tabelas: produtos, pedidos, itens_pedido)
   - [x] Ativar Supabase Auth: Authentication → Settings → habilitar provider Email
-  - [x] Criar usuária inicial pelo painel: Authentication → Users → Add user (e-mail + senha)
-  - [x] Salvar credenciais (SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY) no .env.example preenchido — compartilhar com equipe de forma segura, nunca commitar no repo
+  - [x] Criar usuária inicial pelo painel com role: admin nos metadados
+  - [x] Salvar credenciais (SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY) no .env.example
+
+---
+**[INFRA] Criar workflows de CI/CD**
+- Responsável: Dev 3
+- Prazo: 18/03 ✅ Concluído
+- Branch: feature/ci-cd-setup — Mergeado
+- Tarefas:
+  - [x] Criar .github/workflows/ci-develop.yml
+  - [x] Criar .github/workflows/ci-main.yml
+  - [x] Criar .github/pull_request_template.md
+  - [x] Testar pipeline com PR de exemplo
+
+---
+**[BACKEND] Configurar servidor Node.js + Express**
+- Responsável: Dev 2
+- Prazo: 18/03 ✅ Concluído
+- Branch: feature/backend-setup — Mergeado
+- Tarefas:
+  - [x] Inicializar package.json
+  - [x] Instalar dependências: express, @supabase/supabase-js, dotenv, cors
+  - [x] Criar server.js com health check (GET /)
+  - [x] Criar lib/supabase.js — cliente Supabase isolado (evita dependência circular)
+  - [x] Configurar cliente com SUPABASE_SECRET_KEY
+
+---
+**[BACKEND] Configurar autenticação com Supabase Auth**
+- Responsável: Dev 2
+- Prazo: 19/03 ✅ Concluído
+- Branch: feature/auth-backend — Mergeado
+- Tarefas:
+  - [x] Criar middleware authenticateUser — valida token JWT via supabase.auth.getUser(token)
+  - [x] Aplicar middleware nas rotas protegidas
+
+---
+**[FRONTEND] Criar tela de login**
+- Responsável: Dev 1
+- Prazo: 19/03 ✅ Concluído
+- Branch: feature/login-page — Mergeado
+- Tarefas:
+  - [x] Criar login.html com formulário (e-mail + senha)
+  - [x] Criar css/style.css com layout responsivo global
+  - [x] Criar js/supabase-client.js — inicializar cliente com SUPABASE_PUBLISHABLE_KEY
+  - [x] Criar js/auth.js — login, logout, exigirAutenticacao(), getToken()
+  - [x] Redirecionar por role após login: admin para admin/dashboard.html, customer para index.html
+
+---
+**[BACKEND] CRUD de produtos**
+- Responsável: Dev 2
+- Prazo: 20/03 ✅ Concluído
+- Branch: feature/produtos-backend — Mergeado
+- Tarefas:
+  - [x] GET /produtos — público, sem autenticação
+  - [x] GET /produtos/:id — público
+  - [x] POST /produtos — protegido, apenas admin
+  - [x] PUT /produtos/:id — protegido, apenas admin
+  - [x] DELETE /produtos/:id — protegido, apenas admin (soft delete)
+
+---
 
 ## COLUNA: 📋 Backlog
 
 ### FASE I — até Defesa Parcial (26/03–01/04)
 
 ---
-**[INFRA] Criar workflows de CI/CD**
-- Responsável: Dev 3
-- Prazo: 18/03
-- Branch: `feature/ci-cd-setup`
-- Tarefas:
-  - Criar `.github/workflows/ci-develop.yml` — acionado em PR para `develop`: instalar deps, verificar inicialização do servidor, rodar testes (quando existirem)
-  - Criar `.github/workflows/ci-main.yml` — acionado em PR para `main`: repetir CI + build + trigger de deploy
-  - Criar `.github/pull_request_template.md` com campos: descrição, tipo de mudança, checklist de testes
-  - Testar pipeline com um PR de exemplo
-  - Abrir PR para `develop`
-- Observação: pipeline criado agora (início do projeto), não após o backend estar pronto
-
----
-**[BACKEND] Configurar servidor Node.js + Express**
+**[BACKEND] Middleware de roles (admin vs customer)**
 - Responsável: Dev 2
-- Prazo: 18/03
-- Branch: `feature/backend-setup`
+- Prazo: 22/03
+- Branch: feature/roles-middleware
 - Tarefas:
-  - Inicializar package.json (`npm init`)
-  - Instalar dependências: express, @supabase/supabase-js, dotenv, cors
-  - Criar server.js básico com rota de health check (`GET /`)
-  - Configurar cliente Supabase com SUPABASE_SECRET_KEY (acesso total, ignora RLS)
-  - Abrir PR para `develop`
-- Observação: `bcrypt` e `jsonwebtoken` removidos — autenticação gerenciada pelo Supabase Auth
+  - Criar middleware requireAdmin — verifica user.user_metadata.role === 'admin', retorna 403 se não for
+  - Criar middleware requireCustomer — verifica se o usuário está autenticado (qualquer role)
+  - Substituir authenticateUser por requireAdmin nas rotas de escrita de produtos (POST, PUT, DELETE /produtos)
+  - Aplicar requireAdmin na rota GET /pedidos para admin ver todos os pedidos
+  - Aplicar requireCustomer na rota POST /pedidos para cliente autenticado registrar pedido
+  - Abrir PR para develop
+- Observação: roles definidos em user_metadata.role do Supabase Auth — 'admin' para a vendedora, 'customer' para clientes
 
 ---
-**[BACKEND] Configurar autenticação com Supabase Auth**
+**[BACKEND] Cadastro e pedidos de clientes**
 - Responsável: Dev 2
-- Prazo: 19/03
-- Branch: `feature/auth-backend`
+- Prazo: 22/03
+- Branch: feature/clientes-backend
 - Tarefas:
-  - Criar middleware `authenticateUser` que valida o token JWT do Supabase (header `Authorization: Bearer <token>`)
-  - Usar `supabase.auth.getUser(token)` para verificar autenticidade — sem validação manual de JWT
-  - Aplicar middleware em todas as rotas protegidas (produtos e pedidos)
-  - Testar middleware com token válido e inválido
-  - Abrir PR para `develop`
+  - POST /cadastro — registrar novo cliente via supabase.auth.admin.createUser() com role: customer nos metadados
+  - POST /pedidos — registrar pedido do cliente autenticado (requireCustomer); usuario_id extraído do token, não do body
+  - GET /pedidos — admin vê todos; customer vê apenas os próprios (filtrar por usuario_id)
+  - GET /pedidos/:id — admin vê qualquer; customer vê apenas o próprio
+  - PUT /pedidos/:id/status — apenas admin
+  - Cálculo automático de valor_total no backend
+  - Abrir PR para develop
 
 ---
-**[FRONTEND] Criar tela de login**
+**[FRONTEND] Vitrine pública — catálogo de produtos**
 - Responsável: Dev 1
-- Prazo: 19/03
-- Branch: `feature/login-page`
+- Prazo: 23/03
+- Branch: feature/vitrine-publica
 - Tarefas:
-  - Criar `login.html` com formulário (e-mail + senha)
-  - Criar `css/style.css` com layout responsivo básico
-  - Adicionar SDK do Supabase via CDN no `<head>` de todas as páginas: `<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>`
-  - Criar `js/supabase-client.js` — inicializar cliente com SUPABASE_URL e SUPABASE_PUBLISHABLE_KEY (variáveis públicas, seguro usar no frontend)
-  - Criar `js/auth.js` — usar `supabase.auth.signInWithPassword({ email, password })` para autenticar
-  - Sessão gerenciada automaticamente pelo SDK do Supabase (sem localStorage manual)
-  - Redirecionar para painel após login bem-sucedido
-  - Tratar erros (credenciais inválidas, campo vazio)
-  - Criar `js/auth.js` — incluir função de logout usando `supabase.auth.signOut()` com botão visível no painel
-  - Abrir PR para `develop`
+  - Criar frontend/index.html — catálogo público com listagem de produtos (sem login necessário)
+  - js/index.js — buscar produtos via GET /produtos e renderizar cards
+  - Cada card exibe nome, preço, descrição, imagem e botão "Pedir"
+  - Botão "Pedir": redireciona para login.html se não autenticado, ou para pedido.html se já logado
+  - Link para login.html e cadastro.html no cabeçalho
+  - Abrir PR para develop
 
 ---
-**[BACKEND] CRUD de produtos**
-- Responsável: Dev 2
-- Prazo: 20/03
-- Branch: `feature/produtos-backend`
-- Tarefas:
-  - `GET /produtos` — listar todos os produtos ativos
-  - `GET /produtos/:id` — retornar produto individual (necessário para tela de edição)
-  - `POST /produtos` — criar produto (protegido por middleware de auth)
-  - `PUT /produtos/:id` — editar produto (protegido por middleware de auth)
-  - `DELETE /produtos/:id` — remover produto (protegido por middleware de auth)
-  - Abrir PR para `develop`
-
----
-**[FRONTEND] Páginas de produtos (catálogo + cadastro)**
+**[FRONTEND] Cadastro de clientes**
 - Responsável: Dev 1
-- Prazo: 21/03
-- Branch: `feature/produtos-frontend`
+- Prazo: 23/03
+- Branch: feature/cadastro-cliente
 - Tarefas:
-  - Criar `produtos.html` com listagem do catálogo
-  - Formulário de cadastro/edição de produto
-  - `js/produtos.js` — integração com API (listar, criar, editar, excluir)
-  - Buscar produto individual via `GET /produtos/:id` para popular formulário de edição
-  - Proteger páginas no frontend: verificar `supabase.auth.getSession()` ao carregar `produtos.html` e `pedidos.html` — redirecionar para `login.html` se não houver sessão ativa
+  - Criar frontend/cadastro.html — formulário: nome, e-mail, senha, confirmar senha
+  - js/cadastro.js — POST /cadastro para registrar, redirecionar para index.html após sucesso
+  - Validações: senha mínima 6 caracteres, confirmação de senha, e-mail válido
+  - Link para login.html ("já tem conta? faça login")
+  - Abrir PR para develop
+
+---
+**[FRONTEND] Admin — dashboard**
+- Responsável: Dev 1
+- Prazo: 25/03
+- Branch: `feature/admin-dashboard`
+- Tarefas:
+  - Criar `frontend/admin/dashboard.html` — página protegida: apenas admin acessa
+  - Exibir resumo geral: total de pedidos, pedidos pendentes, confirmados e entregues
+  - Exibir lista dos últimos 5 pedidos recebidos com status
+  - `js/admin/dashboard.js` — buscar dados via `GET /pedidos` e `GET /produtos`, agregar no frontend
+  - Link de navegação para `admin/produtos.html` e `admin/pedidos.html`
+  - Redirecionar para `index.html` se role não for admin
   - Abrir PR para `develop`
+- Observação: não requer endpoint novo — reutiliza GET /pedidos e GET /produtos já existentes
+
+---
+**[FRONTEND] Admin — painel de produtos**
+- Responsável: Dev 1
+- Prazo: 23/03
+- Branch: `feature/admin-produtos`
+- Tarefas:
+  - Criar frontend/admin/produtos.html — painel protegido: apenas admin acessa
+  - Verificar role após exigirAutenticacao() — redirecionar para index.html se não for admin
+  - Grid de produtos com cards: editar e excluir
+  - Formulário de cadastro/edição integrado na página
+  - js/admin/produtos.js — integração com API (listar, criar, editar, excluir)
+  - Abrir PR para develop
+
+---
+**[FRONTEND] Pedido do cliente**
+- Responsável: Dev 1
+- Prazo: 24/03
+- Branch: feature/pedido-cliente
+- Tarefas:
+  - Criar frontend/pedido.html — página protegida (apenas clientes autenticados)
+  - Listar produtos disponíveis com seletor de quantidade
+  - Cálculo de total em tempo real
+  - Campos: endereço de entrega e data de entrega desejada
+  - js/pedido.js — POST /pedidos com token no header Authorization
+  - Após envio: redirecionar para meus-pedidos.html
+  - Abrir PR para develop
+
+---
+**[FRONTEND] Meus pedidos — acompanhamento do cliente**
+- Responsável: Dev 1
+- Prazo: 24/03
+- Branch: feature/meus-pedidos
+- Tarefas:
+  - Criar frontend/meus-pedidos.html — página protegida (apenas clientes autenticados)
+  - Listar pedidos do cliente logado via GET /pedidos (backend filtra por usuario_id)
+  - Exibir: data do pedido, produtos, valor total e status atual (pendente / confirmado / entregue)
+  - js/meus-pedidos.js — integração com API
+  - Abrir PR para develop
+
+---
+**[FRONTEND] Admin — painel de pedidos**
+- Responsável: Dev 1
+- Prazo: 25/03
+- Branch: feature/admin-pedidos
+- Tarefas:
+  - Criar frontend/admin/pedidos.html — painel protegido: apenas admin acessa
+  - Listar todos os pedidos com filtro por status
+  - Atualizar status de cada pedido (pendente → confirmado → entregue)
+  - js/admin/pedidos.js — integração com API
+  - Redirecionar para index.html se role não for admin
+  - Abrir PR para develop
 
 ---
 **[DEV3] Revisar artigo parcial no Overleaf**
@@ -122,7 +219,8 @@ colunas abaixo e adicione os cards na ordem indicada.
 - Prazo: 22/03
 - Tarefas:
   - Adicionar seção de Metodologia (Kanban + GitHub Projects)
-  - Adicionar seção de Tecnologias Utilizadas (incluir decisão do Supabase Auth)
+  - Adicionar seção de Tecnologias Utilizadas (incluir Supabase Auth e sistema de roles)
+  - Atualizar escopo para refletir dois tipos de usuário (admin e cliente)
   - Revisar introdução e referencial teórico
   - Enviar versão atualizada ao orientador
 
@@ -131,7 +229,8 @@ colunas abaixo e adicione os cards na ordem indicada.
 - Responsável: Equipe
 - Prazo: 25/03
 - Tarefas:
-  - Montar slides (introdução, problema, solução, demo do MVP, próximos passos)
+  - Montar slides (introdução, problema, solução, demo do MVP completo, próximos passos)
+  - Demo: fluxo cliente (vitrine → cadastro → pedido → meus pedidos) + fluxo admin (login → produtos → pedidos)
   - Definir quem apresenta cada parte
   - Ensaio da apresentação
 
@@ -140,96 +239,69 @@ colunas abaixo e adicione os cards na ordem indicada.
 ### FASE II — até Entrega Final (22/05)
 
 ---
-**[BACKEND] Sistema de pedidos**
-- Responsável: Dev 2
-- Prazo: 10/04
-- Branch: `feature/pedidos-backend`
-- Tarefas:
-  - `POST /pedidos` — registrar pedido com itens (protegido por middleware de auth)
-  - `GET /pedidos` — listar todos os pedidos
-  - `GET /pedidos/:id` — retornar pedido individual com itens (necessário para tela de detalhes)
-  - `PUT /pedidos/:id/status` — atualizar status do pedido
-  - Cálculo automático de `valor_total` no backend antes de inserir
-  - Abrir PR para `develop`
-
----
-**[FRONTEND] Página de pedidos + painel**
-- Responsável: Dev 1
-- Prazo: 17/04
-- Branch: `feature/pedidos-frontend`
-- Tarefas:
-  - `pedidos.html` — formulário de novo pedido
-  - Seleção de produtos e quantidade
-  - Cálculo de total em tempo real
-  - Painel com listagem e atualização de status
-  - Buscar detalhes do pedido via `GET /pedidos/:id`
-  - `js/pedidos.js` — integração com API
-  - Confirmar proteção de página: `supabase.auth.getSession()` no carregamento — validar que `pedidos.html` redireciona para `login.html` se não houver sessão ativa (implementado no card de produtos, garantir cobertura aqui também)
-  - Abrir PR para `develop`
-
----
 **[BACKEND] Testes unitários**
 - Responsável: Dev 2
 - Prazo: 17/04
-- Branch: `test/unitarios`
+- Branch: test/unitarios
 - Tarefas:
-  - Instalar Jest (`npm install --save-dev jest`)
-  - Testar função de cálculo de `valor_total` (lógica de negócio, isolada do banco)
-  - Testar função de validação de dados de entrada (campos obrigatórios, tipos, limites)
-  - Configurar script `"test": "jest"` no `package.json`
-  - Garantir que o pipeline de CI rode `npm test` automaticamente
-  - Abrir PR para `develop`
+  - Instalar Jest (npm install --save-dev jest)
+  - Testar função de cálculo de valor_total (lógica isolada do banco)
+  - Testar função de validação de dados de entrada
+  - Testar middlewares requireAdmin e requireCustomer com tokens mockados
+  - Confirmar script "test": "jest --passWithNoTests" no package.json
+  - Abrir PR para develop
 
 ---
 **[BACKEND] Testes de integração**
 - Responsável: Dev 2
 - Prazo: 24/04
-- Branch: `test/integracao`
+- Branch: test/integracao
 - Tarefas:
-  - Instalar Supertest (`npm install --save-dev supertest`)
-  - Testar `GET /produtos` — lista retornada corretamente
-  - Testar `GET /produtos/:id` — produto individual e caso não encontrado (404)
-  - Testar `POST /pedidos` — criação com itens válidos
-  - Testar `GET /pedidos/:id` — pedido individual com itens
-  - Testar `PUT /pedidos/:id/status` — atualização de status válido e inválido
-  - Testar middleware de autenticação: requisição sem token deve retornar 401
-  - Abrir PR para `develop`
-- Observação: autenticação testada via token gerado pelo Supabase Auth SDK, não por mock manual
+  - Instalar Supertest (npm install --save-dev supertest)
+  - Testar GET /produtos — público, sem token
+  - Testar POST /produtos — 401 sem token, 403 com token de customer, 201 com token de admin
+  - Testar POST /cadastro — criação de cliente
+  - Testar POST /pedidos — customer autenticado cria pedido
+  - Testar GET /pedidos — admin vê todos, customer vê só os próprios
+  - Testar PUT /pedidos/:id/status — apenas admin
+  - Abrir PR para develop
+- Observação: tokens gerados via Supabase Auth SDK, não por mock manual
 
 ---
 **[FRONTEND] Responsividade e validações**
 - Responsável: Dev 1
 - Prazo: 24/04
-- Branch: `feature/responsividade`
+- Branch: feature/responsividade
 - Tarefas:
-  - Garantir layout funcional em mobile (RNF01)
-  - Validações em todos os formulários (RNF04)
-  - Abrir PR para `develop`
+  - Garantir layout funcional em mobile em todas as páginas (RNF01)
+  - Validações em todos os formulários: login, cadastro, pedido, admin/produtos (RNF04)
+  - Abrir PR para develop
 
 ---
 **[DEV3] Segurança — proteção e validações**
 - Responsável: Dev 3
 - Prazo: 24/04
-- Branch: `feature/seguranca`
+- Branch: feature/seguranca
 - Tarefas:
-  - Confirmar que middleware `authenticateUser` está aplicado em todas as rotas protegidas
-  - Confirmar que SUPABASE_SECRET_KEY e SUPABASE_URL estão isolados no `.env` (nunca no repo)
-  - Validação e sanitização de entrada no backend (todos os campos dos formulários)
+  - Confirmar que requireAdmin está em todas as rotas de escrita e admin
+  - Confirmar que requireCustomer está em POST /pedidos e filtragem por usuario_id em GET /pedidos
+  - Confirmar que SUPABASE_SECRET_KEY e SUPABASE_URL estão isolados no .env (nunca no repo)
+  - Validação e sanitização de entrada no backend (todos os campos)
   - Verificar que RLS está habilitado nas 3 tabelas (produtos, pedidos, itens_pedido)
   - Confirmar HTTPS ativo nas URLs de produção (Vercel + Render)
-  - Abrir PR para `develop`
-- Observação: bcrypt e JWT removidos das responsabilidades — gerenciados pelo Supabase Auth
+  - Abrir PR para develop
 
 ---
 **[DEV3] Deploy da aplicação**
 - Responsável: Dev 3
 - Prazo: 02/05
-- Branch: `feature/deploy`
+- Branch: feature/deploy
 - Tarefas:
-  - Deploy do frontend no Vercel (conectar ao repo, deploy automático na `main`)
-  - Deploy do backend no **Render** (Railway descartado — free tier instável)
+  - Deploy do frontend no Vercel (conectar ao repo, deploy automático na main)
+  - Deploy do backend no Render (Railway descartado — free tier instável)
   - Configurar variáveis de ambiente em produção nos painéis da Vercel e do Render
-  - Testar aplicação em produção end-to-end
+  - Configurar RENDER_DEPLOY_HOOK como secret no GitHub para o workflow de CD
+  - Testar aplicação em produção end-to-end (fluxo cliente + fluxo admin)
   - Documentar URLs de produção no README
 
 ---
@@ -238,7 +310,9 @@ colunas abaixo e adicione os cards na ordem indicada.
 - Prazo: 09/05
 - Tarefas:
   - Agendar sessão de teste com a microempreendedora (agendar com antecedência — recurso externo)
-  - Preparar roteiro de teste (fluxo: login → cadastro de produto → registro de pedido → atualização de status)
+  - Preparar roteiro de teste — dois fluxos:
+    - Fluxo admin: login → cadastrar produto → ver pedidos → atualizar status
+    - Fluxo cliente: cadastro → catálogo → fazer pedido → acompanhar status
   - Coletar feedback por escrito
   - Registrar evidências (prints, anotações) para o Relatório de Implementação
 
@@ -249,7 +323,7 @@ colunas abaixo e adicione os cards na ordem indicada.
 - Tarefas:
   - Implementar correções apontadas pela usuária
   - Ajustes de interface e usabilidade
-  - Abrir PR para `develop` → merge para `main`
+  - Abrir PR para develop → merge para main
 
 ---
 **[DEV3] Relatório de Implementação na Comunidade**
@@ -286,7 +360,7 @@ colunas abaixo e adicione os cards na ordem indicada.
 - Prazo: 05/06
 - Tarefas:
   - Montar slides finais (aplicação implementada, resultados, análise, demo)
-  - Preparar demonstração ao vivo do sistema
+  - Preparar demonstração ao vivo do sistema — fluxo completo cliente + admin
   - Ensaio completo da apresentação
 
 ---
@@ -300,12 +374,12 @@ colunas abaixo e adicione os cards na ordem indicada.
    - 🔄 Em Progresso
    - 👀 Em Revisão
    - ✅ Concluído
-4. Mova o card **[INFRA] Criar repositório** direto para a coluna **✅ Concluído**
-5. Adicione os demais cards na coluna **Backlog**, na ordem indicada
+4. Mova os cards da seção ✅ Concluído acima para a coluna correspondente
+5. Adicione os demais cards na coluna Backlog, na ordem indicada
 6. Para cada card, defina:
-   - **Assignee** (responsável)
-   - **Due date** (prazo)
-   - **Label**: `infra` / `frontend` / `backend` / `docs` / `segurança`
-7. Quando começar uma tarefa, mova o card para **Em Progresso**
-8. Ao abrir o PR, mova para **Em Revisão**
-9. Após merge aprovado, mova para **Concluído**
+   - Assignee (responsável)
+   - Due date (prazo)
+   - Label: infra / frontend / backend / docs / segurança
+7. Quando começar uma tarefa, mova o card para Em Progresso
+8. Ao abrir o PR, mova para Em Revisão
+9. Após merge aprovado, mova para Concluído

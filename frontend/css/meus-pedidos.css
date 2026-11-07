@@ -1,0 +1,113 @@
+/* ============================================================
+   DoceGestor — Estilos da página Meus Pedidos
+   ============================================================ */
+
+body.protegida {
+  visibility: hidden;
+}
+
+/* ------------------------------------------------------------
+   Cards de pedido
+   ------------------------------------------------------------ */
+.pedido-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow);
+}
+
+.pedido-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pedido-card__id {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.pedido-card__data {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.pedido-card__itens {
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pedido-card__item {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.pedido-card__item span {
+  color: var(--text-muted);
+  margin-left: 0.25rem;
+}
+
+.pedido-card__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.pedido-card__total {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--brown);
+}
+
+.pedido-card__entrega {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ------------------------------------------------------------
+   Badges de status (reutilizados do admin.css mas definidos
+   aqui também para não depender do admin.css)
+   ------------------------------------------------------------ */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge--pendente   { background: #fff3e0; color: #e65100; }
+.badge--confirmado { background: #e3f2fd; color: #1565c0; }
+.badge--entregue   { background: #e8f5e9; color: #2e7d32; }
+
+/* ------------------------------------------------------------
+   Estado vazio
+   ------------------------------------------------------------ */
+.estado-vazio {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 3rem 1rem;
+  font-size: 0.95rem;
+}
+
+.estado-vazio a {
+  color: var(--rose-dark);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.estado-vazio a:hover {
+  text-decoration: underline;
+}

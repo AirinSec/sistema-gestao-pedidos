@@ -1,0 +1,32 @@
+{
+  "name": "sistema-gestao-pedidos",
+  "version": "1.0.0",
+  "description": "Backend do Sistema de Gestão de Pedidos — API REST para gestão de pedidos de confeitaria artesanal.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "jest --passWithNoTests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andeAraujo/sistema-gestao-pedidos.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andeAraujo/sistema-gestao-pedidos/issues"
+  },
+  "homepage": "https://github.com/andeAraujo/sistema-gestao-pedidos#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.99.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^4.21.2",
+    "ws": "^8.22.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "supertest": "^7.0.0"
+  }
+}
