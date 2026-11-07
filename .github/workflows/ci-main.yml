@@ -64,6 +64,6 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Acionar deploy no Render
-        run: |
-          curl --fail -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+      # name: Acionar deploy no Render
+        #run: |
+          #curl --fail -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
